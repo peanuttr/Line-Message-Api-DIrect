@@ -9,7 +9,12 @@
         class="message-input">
         <input
           v-model="messages[i]"
-          type="text">
+          type="text"
+          placeholder="message">
+        <input
+          v-model="userId[i]"
+          type="text"
+          placeholder="userId">
         <div
           class="remove-button"
           @click="removeMessage(i)">
@@ -37,7 +42,8 @@ export default {
   name: 'App',
   data () {
     return {
-      messages: ['']
+      messages: [''],
+      userId: ['']
     }
   },
   methods: {
@@ -47,13 +53,15 @@ export default {
           return alert('Error! Message must not more than 5 items.')
         }
 
-        const { data } = await axios.post(`${process.env.VUE_APP_BASE_URL}/broadcast`, {
-          messages: this.messages
+        const { data } = await axios.post(`${process.env.VUE_APP_BASE_URL}/push`, {
+          to: this.userId,
+          messages: this.messages,
         })
 
         alert(data.message)
 
-        this.messages = ['']
+        // this.messages = ['']
+        // this.userId = ['']
       } catch (error) {
         console.error('createBroadcast', error)
         alert(`Error : ${error.message}`)
